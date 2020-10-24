@@ -1,2 +1,4 @@
 # Backup files
 *~
+__pycache__
+.idea
