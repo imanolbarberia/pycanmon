@@ -1,11 +1,10 @@
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import QObject, pyqtSignal
-from PyQt5 import uic
+from PyQt5 import uic, QtCore
 from model import Model
 
 
 class View(QMainWindow):
-    onTestBtnClicked = pyqtSignal()
+    onTestBtnClicked = QtCore.pyqtSignal()
 
     def __init__(self, mdl: Model):
         """
@@ -30,4 +29,4 @@ class View(QMainWindow):
         event.accept()
 
     def display_values(self):
-        print("[VIEW]: {}".format(self.model.get_values()))
+        print("[VIEW]: {}".format(self.model.get_data()))
