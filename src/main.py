@@ -3,15 +3,18 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication
+from controller import Controller
 from view import View
+from model import Model
 
 
 def main():
     app = QApplication(sys.argv)
-    view = View()
+    model = Model()
+    view = View(model)
+    ctrl = Controller(model, view)
 
-    view.show()
-
+    ctrl.run()
     sys.exit(app.exec_())
 
 
