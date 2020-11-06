@@ -12,7 +12,7 @@ class FrameReader(QtCore.QRunnable):
     signals = FrameReaderSignals()
 
     def __init__(self):
-        super(FrameReader, self).__init__()
+        super().__init__()
 
     @QtCore.pyqtSlot()
     def run(self):
@@ -21,7 +21,7 @@ class FrameReader(QtCore.QRunnable):
 
 class DummyFrameReader(FrameReader):
     def __init__(self):
-        super(FrameReader, self).__init__()
+        super().__init__()
         self.running = False
 
     @QtCore.pyqtSlot()
@@ -57,7 +57,7 @@ class DummyFrameReader(FrameReader):
 
 class FileFrameReader(FrameReader):
     def __init__(self):
-        super(FrameReader, self).__init__()
+        super().__init__()
 
     @QtCore.pyqtSlot()
     def run(self):
@@ -66,7 +66,7 @@ class FileFrameReader(FrameReader):
 
 class CANFrameReader(FrameReader):
     def __init__(self):
-        super(FrameReader, self).__init__()
+        super().__init__()
 
     @QtCore.pyqtSlot()
     def run(self):

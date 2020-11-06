@@ -1,10 +1,11 @@
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QHeaderView
 from PyQt5 import uic, QtCore
 from model import Model
+from eventmsgs import EventMsgs
 
 
 class View(QMainWindow):
-    onTestBtnClicked = QtCore.pyqtSignal()
+    eventMsg = QtCore.pyqtSignal(int, list)
 
     def __init__(self, mdl: Model):
         """
@@ -17,16 +18,20 @@ class View(QMainWindow):
 
         # ** Load UI from Qt 5 Designer file **
         self.ui = uic.loadUi("ui/wndmain.ui", self)
-        self.model.signals.data_updated.connect(self.display_values)
-        self.ui.btnTest.clicked.connect(self.onTestBtnClicked.emit)
+
+        self.ui.tblFrames.setModel(self.model)
+        self.ui.tblFrames.verticalHeader().hide()
+        self.ui.tblFrames.setShowGrid(False)
+        self.model.layoutChanged.connect(self.ui.tblFrames.resizeColumnsToContents)
+
+        self.ui.btnTest.clicked.connect(lambda: self.eventMsg.emit(EventMsgs.MSG_BTN_CLICKED, []))
 
     def closeEvent(self, event):
         """
         Event for when closing the window, either by menu or by close button
         :return:
         """
-        # Write current configuration before closing
-        event.accept()
 
-    def display_values(self):
-        print("[VIEW]: {}".format(self.model.get_data()))
+        self.eventMsg.emit(EventMsgs.MSG_APP_CLOSE, [])
+
+        event.accept()

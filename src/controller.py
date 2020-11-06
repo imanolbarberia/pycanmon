@@ -2,6 +2,7 @@ from model import Model
 from view import View
 from PyQt5.QtCore import QThreadPool
 from FrameReader import DummyFrameReader
+from eventmsgs import EventMsgs
 
 
 class Controller:
@@ -14,10 +15,18 @@ class Controller:
         self.thpool = QThreadPool()
 
         # Connect button activation to function
-        self.view.onTestBtnClicked.connect(self.activate)
+        self.view.eventMsg.connect(self.process_event_msg)
 
     def run(self):
         self.view.show()
+
+    def process_event_msg(self, msg, largs):
+        if msg == EventMsgs.MSG_APP_CLOSE:
+            pass
+        elif msg == EventMsgs.MSG_BTN_CLICKED:
+            self.activate()
+        else:
+            pass
 
     def activate(self):
         if self.fr_reader is None:
