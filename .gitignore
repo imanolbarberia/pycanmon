@@ -1,2 +1,7 @@
 # Backup files
 *~
+__pycache__
+.idea
+src/gs_usb
+utils/gs_usb
+
