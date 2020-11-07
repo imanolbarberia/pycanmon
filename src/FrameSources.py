@@ -8,20 +8,27 @@ from PyQt5 import QtCore
 import time
 
 
-class FrameSource(QtCore.QRunnable, QtCore.QObject):
+class FrameSourceSignals(QtCore.QObject):
     """
-    Base FrameSource class, that is a runnable that emits frame signals
+    Signals for the FrameSource class
     """
     frame_ready = QtCore.pyqtSignal(dict)
     work_started = QtCore.pyqtSignal()
     work_stopped = QtCore.pyqtSignal()
 
+
+class FrameSource(QtCore.QRunnable):
+    """
+    Base FrameSource class, that is a runnable that emits frame signals
+    """
+
+    signals = FrameSourceSignals()
+
     def __init__(self):
         """
         Class constructor, call first QObject constructor and then QRunnable constructor
         """
-        QtCore.QObject.__init__(self)
-        QtCore.QRunnable.__init__(self)
+        super().__init__()
 
         self.running = False
 
@@ -33,13 +40,13 @@ class FrameSource(QtCore.QRunnable, QtCore.QObject):
         self.running = True
 
         """ Emit the 'work_started' signal """
-        self.work_started.emit()
+        self.signals.work_started.emit()
 
         while self.running:
             pass
 
         """ Emit the 'work_stopped signal' """
-        self.work_stopped.emit()
+        self.signals.work_stopped.emit()
 
     def stop(self):
         """
@@ -69,7 +76,7 @@ class DummyFrameSource(FrameSource):
 
     def run(self):
         self.running = True
-        self.work_started.emit()
+        self.signals.work_started.emit()
 
         counter = 0
 
@@ -100,4 +107,4 @@ class DummyFrameSource(FrameSource):
             time.sleep(0.1)
             counter += 1
 
-        self.work_stopped.emit()
+        self.signals.work_stopped.emit()
