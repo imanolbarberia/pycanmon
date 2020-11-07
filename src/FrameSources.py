@@ -31,6 +31,7 @@ class FrameSource(QtCore.QRunnable):
         super().__init__()
 
         self.running = False
+        self.setAutoDelete(False)
 
     def run(self):
         """

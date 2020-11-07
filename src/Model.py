@@ -131,10 +131,13 @@ class Model(QtCore.QAbstractTableModel):
     @QtCore.pyqtSlot()
     def frame_source_started(self):
         self.listening = True
+        self.frame_source_changed.emit()
 
     @QtCore.pyqtSlot()
     def frame_source_stopped(self):
         self.listening = False
+        self.frame_source.signals.work_stopped.disconnect(self.frame_source_stopped)
+        self.frame_source_changed.emit()
 
     def start_listening(self):
         """
@@ -195,13 +198,8 @@ class Model(QtCore.QAbstractTableModel):
 
             """ Disconnect signals """
             self.frame_source.signals.work_started.disconnect(self.frame_source_started)
-            self.frame_source.signals.work_stopped.disconnect(self.frame_source_stopped)
             self.frame_source.signals.frame_ready.disconnect(self.add_frame)
             self.frame_source.stop()
-
-            """ Just wait until it safely stops """
-            while self.frame_source.is_running() or self.listening is True:
-                pass
 
     def is_listening(self):
         """
@@ -279,7 +277,7 @@ class Model(QtCore.QAbstractTableModel):
         :param kwargs:
         :return:
         """
-        if len(self.frames) > 0:
+        if len(self.frames_list) > 0:
             ret = len(self.frames_list[0])
         else:
             ret = 0
